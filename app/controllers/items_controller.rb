@@ -26,7 +26,7 @@ class ItemsController < ApplicationController
     @item = Item.create(item_params)
     # @item = Item.create(params[:item])
     if @item.errors.empty?
-      redirect_to item_path(@item)
+      redirect_to item_path(@item) # /items/:id
     else
       render "new"
     end
