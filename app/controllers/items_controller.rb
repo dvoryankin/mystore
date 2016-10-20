@@ -1,12 +1,14 @@
 class ItemsController < ApplicationController
 
+  before_filter :find_item, only: [:show, :edit, :update, :destroy]
+
   def index
     @items = Item.all
   end
 
   # /items/id1 GET
   def show
-    unless @item = Item.where(id: params[:id]).first
+    unless @item
       render text: "Page not found", status: 404
     end
   end
@@ -18,7 +20,7 @@ class ItemsController < ApplicationController
 
   # /items/id1/edit GET
   def edit
-    @item = Item.find(params[:id])
+
   end
 
   # /items POST
@@ -36,7 +38,7 @@ class ItemsController < ApplicationController
   # /items/1 PUT
   def update
     item_params = params.require(:item).permit(:price, :name, :real, :weight, :description)
-    @item = Item.find(params[:id])
+
     @item.update_attributes(item_params)
     # @item = Item.create(params[:item])
     if @item.errors.empty?
@@ -49,9 +51,15 @@ class ItemsController < ApplicationController
 
   # /items/1 DELETE
   def destroy
-    @item = Item.find(params[:id])
     @item.destroy
+    redirect_to action: "index"
   end
+
+  private
+
+    def find_item
+      @item = Item.find(params[:id])
+    end
 
 
 
