@@ -1,11 +1,17 @@
 class ItemsController < ApplicationController
 
-   before_filter :find_item, only: [:show, :edit, :update, :destroy]
-   before_filter :check_if_admin, only: [:edit, :update, :new, :destroy]
+  before_filter :find_item, only: [:show, :edit, :update, :destroy]
+  before_filter :check_if_admin, only: [:edit, :update, :new, :destroy]
 
   def index
     @items = Item.all
   end
+
+  def expensive
+    @items = Item.where("price > 1000")
+    render "index"
+  end
+
 
   # /items/id1 GET
   def show
@@ -68,13 +74,11 @@ class ItemsController < ApplicationController
   private
 
     def find_item
-      @item = Item.find(params[:id])
+      @item = Item.where(id: params[:id]).first
+      render_404 unless @item
     end
 
-    def check_if_admin
-      # render text: "Access denied", status 403 unless current_user.admin == true
-      # render text: "Access denied", status: 403 unless params[:admin]
-    end
+
 
 
 
