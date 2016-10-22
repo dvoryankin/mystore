@@ -1,7 +1,7 @@
 class ItemsController < ApplicationController
 
-  # before_filter :find_item, only: [:show, :edit, :update, :destroy]
-  # before_filter :check_if_admin, only: [:edit, :update, :new, :destroy]
+   before_filter :find_item, only: [:show, :edit, :update, :destroy]
+   before_filter :check_if_admin, only: [:edit, :update, :new, :destroy]
 
   def index
     @items = Item.all
@@ -58,7 +58,9 @@ class ItemsController < ApplicationController
   end
 
   def upvote
-
+    @item = Item.find(params[:id])
+    @item.increment!(:votes_count)
+    redirect_to action: :index
   end
 
 
