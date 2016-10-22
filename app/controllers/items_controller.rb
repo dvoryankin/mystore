@@ -1,6 +1,7 @@
 class ItemsController < ApplicationController
 
-  before_filter :find_item, only: [:show, :edit, :update, :destroy]
+  # before_filter :find_item, only: [:show, :edit, :update, :destroy]
+  # before_filter :check_if_admin, only: [:edit, :update, :new, :destroy]
 
   def index
     @items = Item.all
@@ -20,7 +21,7 @@ class ItemsController < ApplicationController
 
   # /items/id1/edit GET
   def edit
-
+    @item = Item.find(params[:id])
   end
 
   # /items POST
@@ -38,7 +39,7 @@ class ItemsController < ApplicationController
   # /items/1 PUT
   def update
     item_params = params.require(:item).permit(:price, :name, :real, :weight, :description)
-
+    @item = Item.find(params[:id])
     @item.update_attributes(item_params)
     # @item = Item.create(params[:item])
     if @item.errors.empty?
@@ -51,14 +52,26 @@ class ItemsController < ApplicationController
 
   # /items/1 DELETE
   def destroy
+    @item = Item.find(params[:id])
     @item.destroy
     redirect_to action: "index"
   end
+
+  def upvote
+
+  end
+
+
 
   private
 
     def find_item
       @item = Item.find(params[:id])
+    end
+
+    def check_if_admin
+      # render text: "Access denied", status 403 unless current_user.admin == true
+      # render text: "Access denied", status: 403 unless params[:admin]
     end
 
 

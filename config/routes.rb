@@ -1,8 +1,11 @@
 Rails.application.routes.draw do
 
-  resources :items
+  resources :items do
+    get :upvote, on: :member
 
-  get ':controller(/:action(/:id))'
+  end
+
+  # get ':controller(/:action(/:id))'
   # match ':controller(/:action(/:id))(.:format)'
 
 end
